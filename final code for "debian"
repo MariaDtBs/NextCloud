@@ -70,3 +70,18 @@ cat /etc/apache2/sites-available/nix.nix.local.conf
 sudo a2ensite nix.nix.local.conf
 systemctl reload apache2
 sudo nano /etc/php/8.2/apache2/php.ini
+//далее выставляем следующие значенияю сугубо индивидуально, под запрос пользователя.
+memory_limit = 512M
+ upload_max_filesize = 200M
+ max_execution_time = 360
+ post_max_size = 200M
+ date.timezone = Europe/Moscow
+ opcache.enable=1
+ opcache.interned_strings_buffer=8
+ opcache.max_accelerated_files=10000
+ opcache.memory_consumption=128
+ opcache.save_comments=1
+ opcache.revalidate_freq=1
+//везде убираем ; дабы строчки работали
+sudo a2enmod dir env headers mime rewrite ssl
+systemctl reload apache2
