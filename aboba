@@ -1,0 +1,16 @@
+nano /etc/hostname
+nano /etc/hosts 
+wget https://dowload.nextcoloud.com/server/releases/nextcloud-30.0.1.zip
+sudo apt install mariadb-server
+mysql_secure_installation
+//далее идет настройка марии по личным предпочтениям пользовтеля. 
+sudo mariadb
+SHOW DATABASES;
+//должно быть три базы. две локальных. Одна созданная пользователем 
+GRANT ALL PRIVILEGES ON nxt.* TO "nixuser"@"localhost" IDENTIFED BY "ваш_пароль"
+cntr+D
+clear
+apt install php8.2 -y
+php -v
+systemstl status apache2
+
