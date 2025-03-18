@@ -13,4 +13,60 @@ clear
 apt install php8.2 -y
 php -v
 systemstl status apache2
+//дабы выйти, нажимаем q
+apt install libapache2-mod-php8.2 php8.2 php8.2-curl php8.2-cli php8.2-mysql php8.2-gd php8.2-common php8.2-xml php8.2-intl php8.2-imagick php8.2-dev php8.2-mbstring php8.2-zip php8.2-soap php8.2-bz2 php8.2-bcmath php8.2-gmp php8.2-apcu -y
+php -v 
+//ОБЯЗАТЕЛЬНО,чтоб апач был ой версии, которую пользоатель накатил
+//для проверки заходим по айпишнику апаа в браузере, чтоб высвечивалась его вебморда
+clear
+sudo phpenmod bcmath gmp imagick intl
+//или, если не работает: 
+apt install php-imagick
+apt install  php-bcmath
+apt install  php-intl
+apt install  php-gmp
+php -v
+ls -a
+la -ort
+unzip nextcloud-30.0.1.zip
+ls 
+mv nextcloud nix.nix.local
+//просто переименовываем 
+ls -a
+//даем привелегии пользователю апача
+sudo chown -R www-data:www-data nix.nix.local/
+//перемещаем папку некстклоуна локала на локацию для вебморды
+ mv nix.nix.local/ /var/www/
+ls -l /var/www/
+//отключаем от апача дефолтный сайт и подключаем новый, который сами создали
+sudo a2dissite 000-default.conf
+systemctl reload apache2 
+//перезагружаем апач. ВАЖНО ДЕЛАТЬ ЭТО КАЖДЫЙ РАЗ, КАК ЭТО ЧУДИЩЕ ПРОСИТ. ИНАЧЕ ВСЯ РАБОТА КОТУ ПОД ХВОСТ
+//создаем конфиг сайта 
+sudo nano /etc/apache2/sites-available/nix.nix.local.conf:
+______________________________________________________________________________________
 
+<VirtualHost *:80>
+     DocumentRoot "/var/www/nix.nix.local"
+     ServerName nix.nix.local
+   
+    <Directory "/var/www/nix.nix.local">
+        Options MultiViews FollowSymlinks
+        AllowOverride All
+        Order allow,deny
+        Allow from all
+  </Directory>
+
+  TransferLog /var/log/apache2/nix.nix.local_access.log
+  ErrorLog /var/log/apache2/nix.nix.local_error.log
+
+</VirtualHost>
+
+___________________________________________________________
+//вставляем это равило. изменяя некоторые функции под хотелки пользователя(под его личные названия)
+cat /etc/apache2/sites-available/nix.nix.local.conf
+//активация конфигурации
+//выводим enable сайт !!!
+sudo a2ensite nix.nix.local.conf
+systemctl reload apache2
+sudo nano /etc/php/8.2/apache2/php.ini
